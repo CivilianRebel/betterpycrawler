@@ -92,6 +92,11 @@ class TestDB:
     def url_datafile_path(self, url, folder=None):
         return path.join(self.get_folder(url) if folder is None else folder, 'url_data.json')
 
+    def url_fetched(self, url_ob, html):
+        file = path.join(self.get_folder(url_ob), 'raw_html.data')
+        with open(file, "w+") as f:
+            f.write(html)
+
     def is_url_fetched(self, url, folder=None):
         """
         check if the html file of url exists, if not then it has not been fetched

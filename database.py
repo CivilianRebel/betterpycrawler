@@ -196,7 +196,8 @@ class TestDB:
         for d in p.glob('*'):
             if len(url_list) >= nb_urls:
                 break
-            with open(d, 'r') as file:
+            url_path = str(d).split('/')[1]
+            with open(url_path, 'r') as file:
                 url_list.append(str(json.load(file)['url']))
         return url_list
 

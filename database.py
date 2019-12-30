@@ -106,7 +106,6 @@ class TestDB:
             else:
                 return False
         else:
-            self.new_url(url)
             return False
 
     def url_folder_exists(self, url, folder=None):

@@ -1,3 +1,4 @@
+import time
 from utils import hash_func
 from tldextract import extract
 

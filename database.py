@@ -6,57 +6,32 @@ import bs4 as bs
 import hashlib
 import time
 from url import UrlClass
+from utils import hash_func
 from exceptions import NotControllerClass
 import pathlib
 
 _CONTROL = '__control__'
+_DEFAULT_SEED = 'https://getpocket.com/explore/item/everyone-hates-open-offices-here-s-why-they-still-exist'
 
-
-class Database:
-
-    def __init__(self, host='crawler_files', db_loc='crawler_files/'):
-        if not db_loc:
-            db_loc = ''
-        elif not os.path.exists(db_loc):
-            os.mkdir(db_loc)
-        self.working_dir = os.path.join(db_loc, host)
-        if not os.path.exists(self.working_dir):
-            os.mkdir(self.working_dir)
-
-    def file(self, key):
-        f = os.path.join(self.working_dir, key + '.data')
-        return f
-
-    def exists(self, k):
-        key = self.file(k)
-        if os.path.isfile(key):
-            return True
-        elif not os.path.exists(key):
-            return False
-
-    def __setitem__(self, key, value):
-        f = self.file(key)
-        with open(f, 'w+') as file:
-            json.dump(value, file)
-
-    def __getitem__(self, key):
-        f = self.file(key)
-        if not self.exists(key):
-            raise KeyError
-        else:
-            with open(f, 'r') as file:
-                return json.load(file)
+# todo: rename to just Database
 
 
 class TestDB:
 
-    def __init__(self, host=_CONTROL):
+    def __init__(self, host=_CONTROL, *args, **kwargs):
         if host is _CONTROL:
             self.controller_mode = True
         else:
             self.controller_mode = False
         self.host_hash = host
         self.root = 'crawler_files\\'
+        self.seed_url = kwargs.get('seed_url', _DEFAULT_SEED)
+        self.init()
+
+    def init(self):
+        if not path.exists(self.root):
+            os.mkdir(self.root)
+            self.new_url(self.seed_url)
 
     @property
     def host_folder(self):
@@ -203,6 +178,5 @@ class TestDB:
             url_path = str(d).split('/')[1]
             url_ob = self.get_url_by_hash(url_path)
             if not self.is_url_fetched(url_ob):
-                with open(url_path, 'r') as file:
-                    url_list.append(url_ob)
+                url_list.append(url_ob)
         return url_list

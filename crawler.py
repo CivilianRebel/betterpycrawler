@@ -29,4 +29,4 @@ class Crawler(multiprocessing.Process):
             links = [link for link in body.find_all('a')]
             links = [link.get('href') for link in links]
             links = utils.process_links(links)
-
+            [self.database.new_url(link) for link in links]

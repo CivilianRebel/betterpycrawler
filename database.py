@@ -31,11 +31,15 @@ class TestDB:
     def init(self):
         if not path.exists(self.root):
             os.mkdir(self.root)
-            self.new_url(self.seed_url)
+
+        self.new_url(self.seed_url)
 
     @property
     def host_folder(self):
-        return path.join(self.root, self.host_hash)
+        host_f = path.join(self.root, self.host_hash)
+        if not path.exists(host_f):
+            os.mkdir(host_f)
+        return host_f
 
     def _host_folder(self, host=None):
         return path.join(self.root, self.host_hash if host is None else host)
@@ -46,11 +50,11 @@ class TestDB:
     def get_folder(self, url):
         """
         Gets folder path of url
-        :type url: Url
+        :type url: UrlClass
         :param url: MD5 hash of url for folder path
         :return: relative path to url folder
         """
-        folder = path.join(self.root, self.host_hash, url.url_hash)
+        folder = path.join(self.host_folder, url.url_hash)
         return folder
 
     def get_html_path(self, url, folder=None):
@@ -120,13 +124,6 @@ class TestDB:
         :param url: Url object of entry to create
         :param folder: string of folder to initialize
         """
-        entry = {
-            'url': url.to_string(),
-            'url_hash': url.url_hash,
-            'host': url.host,
-            'host_hash': url.host_hash,
-            'time_found': time.time()
-        }
         with open(self.url_datafile_path(url), 'w+') as f:
             json.dump(url.to_dict(), f)
 
@@ -179,4 +176,4 @@ class TestDB:
             url_ob = self.get_url_by_hash(url_path)
             if not self.is_url_fetched(url_ob):
                 url_list.append(url_ob)
-        return url_list
+        yield url_list

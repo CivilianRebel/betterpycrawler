@@ -10,7 +10,8 @@ class Url:
         if url is None:
             print(f'Url is None... Be sure to call url.set_url(url_str) to avoid errors')
         self.url = url
-        self.host = host
+        if host is not None:
+            print('This parameter is not implemented yet')
 
     def set_url(self, url_str):
         """
@@ -21,6 +22,10 @@ class Url:
         self.url = url_str
         return self
 
+    @property
+    def host(self):
+        return self.identify_host()
+
     def set_host(self, host):
         """
         Set host(example.com not including www)
@@ -29,8 +34,7 @@ class Url:
         :type host: str
         :param host: String containing host to set to field variable 'host'
         """
-        self.host = host
-        return self
+        raise NotImplementedError
 
     def __str__(self):
         """

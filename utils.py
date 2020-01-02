@@ -2,6 +2,7 @@ import hashlib
 from urllib.parse import urlparse, urljoin
 from url import Url as UrlClass
 
+
 def process_links(links):
     final_links = []
     for link in links:

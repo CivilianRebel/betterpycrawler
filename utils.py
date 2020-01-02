@@ -24,8 +24,9 @@ def process_links(links):
             if not re.match(regex, str(url_ob)) is None:
                 final_links.append(UrlClass(url=urljoin(host, str(url_ob))))
         else:
-            print(str(url_ob))
-            final_links.append(url_ob)
+            if not re.match(regex, str(url_ob)) is None:
+                print(str(url_ob))
+                final_links.append(url_ob)
     return final_links
 
 

@@ -27,6 +27,6 @@ class Controller:
 
 
 if __name__ == '__main__':
-    control = Controller(3, 10)
+    control = Controller(4, 1)
     # got no url in db structure, lets see what happens
     control.run()

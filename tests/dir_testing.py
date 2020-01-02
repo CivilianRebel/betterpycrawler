@@ -1,6 +1,4 @@
-import os
-import pathlib
+import glob
 
-p = pathlib.Path('../crawler_files')
-for dir in p.glob('*'):
-    print(str(dir))
+for d in glob.glob('../crawler_files/*'):
+    print(type(d))

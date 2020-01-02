@@ -77,7 +77,7 @@ class TestDB:
     def url_fetched(self, url_ob, html):
         file = path.join(self.get_folder(url_ob), 'raw_html.data')
         with open(file, "w+") as f:
-            f.write(html)
+            f.write(str(html.encode('utf8')))
 
     def is_url_fetched(self, url, folder=None):
         """
@@ -147,6 +147,7 @@ class TestDB:
             raise NotControllerClass()
         for _dir in glob.glob('crawler_files\\*'):
             y = str(_dir).split('\\')[1]
+            print(y)
             yield y
 
     def get_url_by_hash(self, url_hash, folder=None):
@@ -182,8 +183,7 @@ class TestDB:
         :param nb_urls: number of urls to grab
         """
         url_list = []
-        p = pathlib.Path(self._host_folder(_host))
-        for d in p.glob('*'):
+        for d in glob.glob(f'{self._host_folder(_host)}\\*'):
             print(d)
             if len(url_list) >= nb_urls:
                 break

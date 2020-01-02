@@ -93,7 +93,7 @@ class UrlClass():
         return entry
 
     def identify_host(self):
-        tsd, td, tsu = extract(self.url)  # prints abc, hostname, com
+        tsd, td, tsu = extract(str(self))  # prints abc, hostname, com
         return td + '.' + tsu
 
 

@@ -1,6 +1,5 @@
 import hashlib
 from urllib.parse import urlparse, urljoin
-from url import UrlClass
 
 
 def process_links(links):

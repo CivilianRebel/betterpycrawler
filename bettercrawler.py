@@ -14,12 +14,11 @@ class Controller:
 
     def run(self):
         for crawler_idx in range(self.nb_processes):
-            self.jobs[next(self.db.host_generator())] = []
-        for key in self.jobs.keys():
+            key = next(self.db.host_generator())
             self.jobs[key] = self.db.get_url_list(self.nb_urls_per_process, key)
-        for key in self.jobs.keys():
             c = Crawler(key, self.jobs[key])
             self.crawlers.append(c)
+
         [crawler.start() for crawler in self.crawlers]
         [crawler.join() for crawler in self.crawlers]
 

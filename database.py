@@ -8,7 +8,7 @@ import time
 from url import UrlClass
 from utils import hash_func
 from exceptions import NotControllerClass
-import pathlib
+import glob
 
 _CONTROL = '__control__'
 _DEFAULT_SEED = 'https://getpocket.com/explore/item/everyone-hates-open-offices-here-s-why-they-still-exist'
@@ -31,8 +31,11 @@ class TestDB:
     def init(self):
         if not path.exists(self.root):
             os.mkdir(self.root)
-
-        self.new_url(self.seed_url)
+        if not path.exists(path.join(self.root, self.seed_url.host_hash)):
+            os.mkdir(path.join(self.root, self.seed_url.host_hash))
+        if not path.exists(path.join(self.root, self.seed_url.host_hash, self.seed_url.url_hash)):
+            os.mkdir(path.join(self.root, self.seed_url.host_hash, self.seed_url.url_hash))
+        self.init_url_json(self.seed_url)
 
     @property
     def host_folder(self):
@@ -54,7 +57,7 @@ class TestDB:
         :param url: MD5 hash of url for folder path
         :return: relative path to url folder
         """
-        folder = path.join(self.host_folder, url.url_hash)
+        folder = path.join(self._host_folder(host=url.host_hash), url.url_hash)
         return folder
 
     def get_html_path(self, url, folder=None):
@@ -110,11 +113,11 @@ class TestDB:
         :type url: Url
         :param url: Url object of entry to create
         """
-        folder = self.get_folder(url)
-        if not self.url_folder_exists(url, folder=folder):
-            os.mkdir(folder)
-            self.init_url_json(folder, url)
-            # this should be all we have to do
+        if not path.exists(path.join(self.root, url.host_hash)):
+            os.mkdir(path.join(self.root, url.host_hash))
+        if not path.exists(path.join(self.root, url.host_hash, url.url_hash)):
+            os.mkdir(path.join(self.root, url.host_hash, url.url_hash))
+        self.init_url_json(url)
 
     def init_url_json(self, url, folder=None):
         """
@@ -142,24 +145,35 @@ class TestDB:
     def host_generator(self):
         if not self.controller_mode:
             raise NotControllerClass()
-        p = pathlib.Path('crawler_files/')
-        for _dir in p.glob('*'):
-            yield str(_dir).split('\\')[1]
+        for _dir in glob.glob('crawler_files\\*'):
+            y = str(_dir).split('\\')[1]
+            yield y
 
-    def get_url_by_hash(self, url):
+    def get_url_by_hash(self, url_hash, folder=None):
         """
         Get a url object from hash and host hash
-        :param url: url hash to get
+        :param folder: host hash of url
+        :param url_hash: url hash to get
         """
         url_ob = None
-        if self.url_folder_exists(url):
-            url_data_path = self.url_datafile_path(url)
+        if self.url_folder_exists(url_hash, folder):
+            url_data_path = self.url_datafile_path(url_hash, folder)
             if path.exists(url_data_path) and path.isfile(url_data_path):
                 with open(url_data_path, 'r') as file:
                     temp = json.load(file)
                     url_ob = UrlClass(url=temp['url'],
                                       host=temp['host'])
         return url_ob
+
+    def get_url_by_path(self, url_path):
+        url_ob = None
+        if path.exists(path.join(url_path, 'url_data.json')):
+            with open(path.join(url_path, 'url_data.json'), 'r') as file:
+                temp = json.load(file)
+                url_ob = UrlClass(url=temp['url'])
+            return url_ob
+        else:
+            raise NotImplementedError
 
     def get_url_list(self, nb_urls, _host):
         """
@@ -170,10 +184,10 @@ class TestDB:
         url_list = []
         p = pathlib.Path(self._host_folder(_host))
         for d in p.glob('*'):
+            print(d)
             if len(url_list) >= nb_urls:
                 break
-            url_path = str(d).split('/')[1]
-            url_ob = self.get_url_by_hash(url_path)
+            url_ob = self.get_url_by_path(d)
             if not self.is_url_fetched(url_ob):
                 url_list.append(url_ob)
-        yield url_list
+        return url_list

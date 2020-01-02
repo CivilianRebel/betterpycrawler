@@ -201,8 +201,10 @@ class TestDB:
             if len(url_list) >= nb_urls:
                 break
             url_path = str(d).split('/')[1]
-            with open(url_path, 'r') as file:
-                url_list.append(str(json.load(file)['url']))
+            url_ob = self.get_url_by_hash(url_path)
+            if not self.is_url_fetched(url_ob):
+                with open(url_path, 'r') as file:
+                    url_list.append(url_ob)
         return url_list
 
 

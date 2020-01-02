@@ -1,7 +1,7 @@
 import requests as web
 import bs4 as bs
 import multiprocessing
-from url import Url as UrlClass
+from url import UrlClass
 import utils
 from database import TestDB as Database
 

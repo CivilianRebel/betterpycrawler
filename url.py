@@ -3,7 +3,7 @@ from utils import hash_func
 from tldextract import extract
 
 
-class Url:
+class UrlClass():
 
     def __init__(self, url=None, host=None, *args, **kwargs):
         self.debug = kwargs.get('debug', False)
@@ -100,3 +100,7 @@ class Url:
 def url_not_set_error():
     print('You forgot to set the URL. Use the url.set_url(url_here) function next time')
     raise AttributeError()
+
+
+if __name__ == '__main__':
+    uu = UrlClass(url='test')

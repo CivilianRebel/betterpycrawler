@@ -24,10 +24,6 @@ class Controller:
 
 
 if __name__ == '__main__':
-    from tldextract import extract
-
-    tsd, td, tsu = extract("http://www.hostname.com/somethings/anything/")  # prints abc, hostname, com
-
-    url = td + '.' + tsu
-
-    print(url)
+    control = Controller(1, 10)
+    # got no url in db structure, lets see what happens
+    control.run()

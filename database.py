@@ -5,7 +5,7 @@ import requests as web
 import bs4 as bs
 import hashlib
 import time
-from url import Url as UrlClass
+from url import UrlClass
 from exceptions import NotControllerClass
 import pathlib
 

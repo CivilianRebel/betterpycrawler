@@ -206,11 +206,3 @@ class TestDB:
                 with open(url_path, 'r') as file:
                     url_list.append(url_ob)
         return url_list
-
-
-if __name__ == '__main__':
-    _url = 'https://getpocket.com/explore/item/the-hidden-meanings-behind-15-company-names'
-    host_hash = hashlib.md5(bytes('getpocket.com', 'utf8')).hexdigest()
-    url_hash = hashlib.md5(bytes(_url, 'utf8')).hexdigest()
-    db = Database(host=host_hash)
-    db.fetched(url_hash, html)

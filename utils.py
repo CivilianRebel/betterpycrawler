@@ -12,6 +12,7 @@ def process_links(links):
             host = url_ob.host
             if not re.match(regex, str(url_ob)) is None:
                 final_links.append(urljoin(host, str(url_ob)))
+    return final_links
 
 
 def hash_func(s):

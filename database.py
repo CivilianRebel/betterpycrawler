@@ -25,7 +25,7 @@ class TestDB:
             self.controller_mode = False
         self.host_hash = host
         self.root = 'crawler_files\\'
-        self.seed_url = kwargs.get('seed_url', _DEFAULT_SEED)
+        self.seed_url = kwargs.get('seed_url', UrlClass(url=_DEFAULT_SEED))
         self.init()
 
     def init(self):
